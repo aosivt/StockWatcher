@@ -40,6 +40,8 @@
         <!--<property name="hbm2ddl.auto">create</property>-->
 
         <mapping class="aosivt.server.Entity.Banks" />
+        <mapping class="aosivt.server.Entity.Bank" />
+        <mapping class="aosivt.server.Entity.Point" />
 
 
     </session-factory>

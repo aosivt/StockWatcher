@@ -1,7 +1,6 @@
 package aosivt.server.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by oshchepkovayu on 22.12.16.
@@ -10,22 +9,53 @@ import javax.persistence.Table;
 @Table(name = "point")
 public class Point {
 
-    protected Long id_city;
+    @Id
+    @GeneratedValue
+    @Column(name = "city_id")
+    protected Long cityId;
+
+    @Column(name = "bank_id")
+    protected Long bankId;
+
+    @ManyToOne
+    private Bank bank;
+
+    @Column(name = "city")
     protected String city;
+    @Column(name = "address")
     protected String address;
+    @Column(name = "time")
     protected String time;
 
-    public Long getId_city() {
-        return id_city;
+
+    public Long getBankId() {
+        return bankId;
     }
 
-    public void setId_city(Long id_city) {
-        this.id_city = id_city;
+    public void setBankId(Long bankId) {
+        this.bankId = bankId;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
     public String getCity() {
         return city;
     }
+
 
     public void setCity(String city) {
         this.city = city;
@@ -46,4 +76,6 @@ public class Point {
     public void setTime(String time) {
         this.time = time;
     }
+
+
 }

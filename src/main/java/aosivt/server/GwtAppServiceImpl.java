@@ -26,7 +26,9 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
         if (!FieldValidator.isValidData(data)) {
             throw new IllegalArgumentException("Имя должно быть больше трех символов");
         }
-        getListXml();
+        WorkingWithDB workingWithDB = new WorkingWithDB(getListXml());
+        workingWithDB.UpsertDBOra();
+
         String serverInfo = getServletContext().getServerInfo();
         String userAgent = getThreadLocalRequest().getHeader("User-Agent");
 
@@ -69,4 +71,5 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
         }
         return  resultlist;
     }
+
 }
