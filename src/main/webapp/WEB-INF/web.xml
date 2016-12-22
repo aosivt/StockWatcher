@@ -12,7 +12,7 @@
 
     <servlet-mapping>
         <servlet-name>gwtServlet</servlet-name>
-        <url-pattern>/gwtApp/gwtAppService</url-pattern>
+        <url-pattern>/StockWatcher/gwtServlet</url-pattern>
     </servlet-mapping>
     <!-- Default page to serve -->
     <welcome-file-list>

@@ -5,22 +5,24 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
 
+
   <!-- Inherit the default GWT style sheet.                       -->
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
   <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+   <!--<inherits name='com.google.gwt.user.theme.dark.Dark'/>-->
 
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='aosivt.client.StockWatcherEntryPoint'/>
 
+
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
+  <!--<source path='server'/>-->
 
   <add-linker name="xsiframe"/>
   <!-- <set-configuration-property name="devModeRedirectEnabled" value="true"/> -->
-
 </module>

@@ -1,12 +1,14 @@
 package aosivt.server;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import aosivt.client.GwtAppServiceIntf;
 import aosivt.shared.FieldValidator;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
  * The server-side implementation of the RPC service.
  */
+
 public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppServiceIntf {
 
 
@@ -15,16 +17,13 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
             throw new IllegalArgumentException("Имя должно быть больше трех символов");
         }
 
-//        String serverInfo = getServletContext().getServerInfo();
+        String serverInfo = getServletContext().getServerInfo();
         String userAgent = getThreadLocalRequest().getHeader("User-Agent");
 
         data = escapeHtml(data);
         userAgent = escapeHtml(userAgent);
 
-        return "Привет, " + data + "!<br> Инфо сервера: "
-                +
-//                serverInfo +
-                ".<br> Вы используете:" +
+        return "Привет, " + data + "!<br> Инфо сервера: " + serverInfo + ".<br> Вы используете:" +
                 "<br>" + userAgent;
     }
 

@@ -1,12 +1,12 @@
 package aosivt.client;
 
 
+import aosivt.shared.FieldValidator;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import aosivt.shared.FieldValidator;
 
 
 /**
@@ -24,7 +24,7 @@ public class StockWatcherEntryPoint implements EntryPoint {
   final HTML serverResponseHtml = new HTML();
   final Label sendToServerLabel = new Label();
   final Button closeButton = new Button("Close");
-  private final GwtAppServiceIntfAsync gwtAppService = GWT.create(GwtAppServiceIntf.class);
+  private final GwtAppServiceIntfAsync gwtAppServiceImpl = GWT.create(GwtAppServiceIntf.class);
   @Override
   public void onModuleLoad() {
     helloLabel.setText("GwtApp Application hello world");
@@ -86,17 +86,18 @@ public class StockWatcherEntryPoint implements EntryPoint {
     errorLabel.setText("");
     String nameToServer = nameField.getText();
     if (!FieldValidator.isValidData(nameToServer)) { //отобразить ошибку на html странице
-      errorLabel.setText("Имя должно содержать больше трех символов");
+      errorLabel.setText("Имя должно содержать больше трех символов111");
       return;
     }
     sendToServerLabel.setText(nameToServer);
     confirmButton.setEnabled(false);
     serverResponseHtml.setText("");
-    gwtAppService.gwtAppCallServer(nameToServer, new AsyncCallback<String>() {
+    gwtAppServiceImpl.gwtAppCallServer(nameToServer, new AsyncCallback<String>() {
       public void onFailure(Throwable caught) {
+
         dialogBox.setText("Remote Procedure Call - Failure");
         serverResponseHtml.addStyleName("serverResponseLabelError");
-        serverResponseHtml.setHTML("ERROR ON SERVER");
+        serverResponseHtml.setHTML(caught.getMessage());
         dialogBox.center();
         closeButton.setFocus(true);
       }
