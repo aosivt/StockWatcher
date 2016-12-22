@@ -4,6 +4,9 @@ import aosivt.server.Entity.Bank;
 import aosivt.server.Entity.Banks;
 import aosivt.server.Entity.Point;
 import aosivt.server.XmlGetter.StructureXml;
+import aosivt.server.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -13,7 +16,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by oshchepkovayu on 22.12.16.
@@ -44,14 +49,19 @@ public class WorkingWithDB {
         {
         Bank bank = null;
         Point point = null;
+        List<Point> pointList = new ArrayList<Point>();
+        Map<Bank,List<Point>> bankPoints = new HashMap<Bank, List<Point>>();
         for (StructureXml structureXml : this.structureXmlList)
         {
             bank = new Bank();
             bank.setName(structureXml.getNameBank());
+
             point = new Point();
             point.setAddress(structureXml.getAddress());
             point.setTime(structureXml.getTime());
             point.setCity(structureXml.getCity());
+            pointList.add(point);
+            bankPoints.put(bank,pointList);
         }
         }
         return true;
@@ -82,6 +92,28 @@ public class WorkingWithDB {
         }
 
         return true;
+    }
+
+    private static void fieldingDB(String _input_string)
+    {
+        Session session = null;
+
+        try {
+            session  = HibernateUtil.getSessionFactory().openSession();
+            Transaction transaction = session.beginTransaction();
+            System.out.println("Inserting Record");
+            Banks banks = new Banks();
+            banks.setContent(_input_string);
+            session.save(banks);
+            transaction.commit();
+            session.clear();
+            session.close();
+            System.out.println("Done");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
     private String createXmlString()
