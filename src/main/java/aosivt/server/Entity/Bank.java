@@ -20,8 +20,8 @@ public class Bank {
     @Column(name = "nameBank")
     protected String name;
 
-    @OneToMany(mappedBy="bankId", cascade=CascadeType.PERSIST)
-    public List<Point> point = new ArrayList<Point>();
+    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="bankId", cascade=CascadeType.ALL)
+    public List<PivotTable> pivotTables = new ArrayList<PivotTable>();
 
 
     public Long getBankId() {
@@ -47,6 +47,8 @@ public class Bank {
     public void setPoint(List<Point> point) {
         this.point = point;
     }
+
+
     public int hashCode() {
         return this.getName().hashCode();
     }

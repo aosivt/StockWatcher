@@ -12,7 +12,7 @@
         <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
         <property name="connection.username">system</property>
         <property name="connection.password">oracle</property>
-        <property name="connection.pool_size">10</property>
+        <property name="connection.pool_size">100</property>
 
     <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>

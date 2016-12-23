@@ -1,6 +1,7 @@
 package aosivt.server;
 
 import aosivt.client.GwtAppServiceIntf;
+import aosivt.server.Entity.Bank;
 import aosivt.server.Entity.Banks;
 import aosivt.server.util.HibernateUtil;
 import aosivt.shared.FieldValidator;
@@ -26,10 +27,14 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
         if (!FieldValidator.isValidData(data)) {
             throw new IllegalArgumentException("Имя должно быть больше трех символов");
         }
-        WorkingWithDB workingWithDB = new WorkingWithDB(getListXml());
-        workingWithDB.UpsertDBOra();
+//        WorkingWithDB workingWithDB = new WorkingWithDB(getListXml());
+//        workingWithDB.EnterPointFromDB();
+//        workingWithDB = null;
 
-        String serverInfo = getServletContext().getServerInfo();
+        WorkingWithDB workingWithDB = new WorkingWithDB();
+        List<Bank> banks = workingWithDB.getBankList();
+
+                String serverInfo = getServletContext().getServerInfo();
         String userAgent = getThreadLocalRequest().getHeader("User-Agent");
 
         data = escapeHtml(data);

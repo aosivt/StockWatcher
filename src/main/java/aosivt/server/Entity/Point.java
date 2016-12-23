@@ -1,6 +1,8 @@
 package aosivt.server.Entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by oshchepkovayu on 22.12.16.
@@ -11,14 +13,19 @@ public class Point {
 
     @Id
     @GeneratedValue
-    @Column(name = "city_id")
-    protected Long cityId;
+    @Column(name = "point_id",updatable = true)
+    protected Long pointId;
 
-    @Column(name = "bank_id")
-    protected Long bankId;
+//    @Column(name = "bank_id",nullable = false,insertable = false,updatable = false)
+//    protected Long bankId;
 
-    @ManyToOne
-    private Bank bank;
+//    @ManyToOne(targetEntity = Bank.class,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+//    @JoinColumn(name = "bank_id",referencedColumnName = "bank_id")
+//    private Bank bank;
+
+    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="pointId", cascade=CascadeType.ALL)
+    public List<PivotTable> pivotTables = new ArrayList<PivotTable>();
+
 
     @Column(name = "city")
     protected String city;
@@ -28,28 +35,12 @@ public class Point {
     protected String time;
 
 
-    public Long getBankId() {
-        return bankId;
+    public Long getPointId() {
+        return pointId;
     }
 
-    public void setBankId(Long bankId) {
-        this.bankId = bankId;
-    }
-
-    public Bank getBank() {
-        return bank;
-    }
-
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
-
-    public Long getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
+    public void setPointId(Long pointId) {
+        this.pointId = pointId;
     }
 
     public String getCity() {
