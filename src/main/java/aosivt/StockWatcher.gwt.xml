@@ -5,7 +5,8 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
   <!--<inherits name="com.vaadin.polymer.Elements"/>-->
-
+<!--<inherits name="gwt.material.design.client.ui.MaterialButton"/>-->
+<!--<inherits name="gwt.material.design.client.ui.MaterialToast"/>-->
 
   <!-- Inherit the default GWT style sheet.                       -->
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>

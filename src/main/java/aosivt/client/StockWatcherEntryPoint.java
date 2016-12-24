@@ -11,13 +11,17 @@ import com.google.gwt.user.client.ui.*;
 //import com.vaadin.polymer.paper.widget.PaperButton;
 //import com.vaadin.polymer.paper.widget.PaperToast;
 
+import gwt.material.design.client.ui.MaterialButton;
+import gwt.material.design.client.ui.MaterialToast;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class StockWatcherEntryPoint implements EntryPoint {
 
-
+  @UiField
+  MaterialButton btnClick, btnHover, btnDoubleClick;
 
 //  @UiField
 //  PaperButton testbutton = new PaperButton();
