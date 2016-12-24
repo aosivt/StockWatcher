@@ -2,6 +2,7 @@ package aosivt.server;
 
 import aosivt.server.Entity.Bank;
 import aosivt.server.Entity.Banks;
+import aosivt.server.Entity.PivotTable;
 import aosivt.server.Entity.Point;
 import aosivt.server.XmlGetter.StructureXml;
 import aosivt.server.util.HibernateUtil;
@@ -118,26 +119,22 @@ public class WorkingWithDB {
             Point point = null;
             List<Point> pointList = null;
 
+
             for (Bank bankFromMap : _input_data.keySet())
             {
                 bank = checkExistBank(bankFromMap.getName());
-                    pointList = bank.getPoint();
+
+                pointList = new ArrayList<Point>();
+
                     for (Point pointFromMap : _input_data.get(bankFromMap)) {
                         point = checkExistPoint(
                                 pointFromMap.getCity(),
                                 pointFromMap.getAddress(),
-                                pointFromMap.getTime(),
-                                bank
-                                );
-                        if (pointList.indexOf(point) < 0){
-                            pointList.add(point);
-                        }
+                                pointFromMap.getTime()
+                        );
+                       checExistPivotTable(bank,point);
+                    }
 
-                    }
-                    if (!bank.getPoint().equals(pointList)) {
-                        bank.setPoint(pointList);
-                        insertBank(bank);
-                    }
 
                     pointList = null;
                     point = null;
@@ -170,7 +167,7 @@ public class WorkingWithDB {
         }
         return bank;
     }
-    private Point checkExistPoint(String _city,String _address,String _time,Bank _bank)
+    private Point checkExistPoint(String _city,String _address,String _time)
     {
         Point point = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -187,9 +184,7 @@ public class WorkingWithDB {
             point.setCity(_city);
             point.setAddress(_address);
             point.setTime(_time);
-//            point.setBankId(_bank.getBankId());
-            point.setBank(_bank);
-            point.setCityId(insertPoint(point));
+            point.setPointId(insertPoint(point));
         }
         return point;
     }
@@ -200,7 +195,7 @@ public class WorkingWithDB {
         try {
             session  = HibernateUtil.getSessionFactory().openSession();
             Transaction transaction = session.beginTransaction();
-            session.saveOrUpdate(_bank);
+            session.save(_bank);
             transaction.commit();
             result_id = _bank.getBankId();
             session.clear();
@@ -221,7 +216,7 @@ public class WorkingWithDB {
             Transaction transaction = session.beginTransaction();
             session.save(_point);
             transaction.commit();
-            result_id = _point.getBankId();
+            result_id = _point.getPointId();
             session.clear();
             session.close();
         } catch (Exception e) {
@@ -231,6 +226,59 @@ public class WorkingWithDB {
         }
         return result_id;
     }
+    private PivotTable checExistPivotTable (Bank _bank, Point _point)
+    {
+        PivotTable pivotTable= null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Criteria criteria = session.createCriteria(PivotTable.class);
+        criteria.add(Restrictions.eq("bank",_bank));
+        criteria.add(Restrictions.eq("point",_point));
+        pivotTable = (PivotTable) criteria.uniqueResult();
+        session.clear();
+        session.close();
+        if (pivotTable==null){
+            pivotTable = new PivotTable();
+            pivotTable.setBank(_bank);
+            pivotTable.setPoint(_point);
+            pivotTable.setPivotId(insertPivotTable(_bank,_point));
+
+        }
+        return pivotTable;
+    }
+    private Long insertPivotTable(Bank _bank, Point _point)
+    {
+        Long result_id;
+        Session session = null;
+        PivotTable pivotTable;
+        try {
+            session  = HibernateUtil.getSessionFactory().openSession();
+            Transaction transaction = session.beginTransaction();
+
+                pivotTable = new PivotTable();
+                pivotTable.setBank(_bank);
+                pivotTable.setPoint(_point);
+                session.save(pivotTable);
+            result_id = pivotTable.getPivotId();
+
+            transaction.commit();
+
+            session.clear();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return null;
+        }finally {
+
+            _bank = null;
+            _point = null;
+            pivotTable = null;
+        }
+        return result_id;
+
+    }
+
 
     private void selectBankList()
     {
@@ -240,14 +288,14 @@ public class WorkingWithDB {
                 "from Bank b , Point p where b.bankId = p.bankId";*/
         this.hsql_query =
                 "select b " +
-                        "from Bank b inner join b.point " +
+                        "from Bank b inner join b.pivotTables pt " +
                         "order by b.name,  b.bankId";
 //                        "group by b.name,  b.bankId";
 // ,Point p         join p on b.bankId = p.bankId
 try {
     session = HibernateUtil.getSessionFactory().openSession();
     Query query = session.createQuery(this.hsql_query);
-    List<Object[]> listResult = query.list();
+    this.bankList = query.list();
 
 //        Transaction transaction = session.beginTransaction();
 //
@@ -271,6 +319,7 @@ try {
     public void setBankList(List<Bank> bankList) {
         this.bankList = bankList;
     }
+
 
 
 }

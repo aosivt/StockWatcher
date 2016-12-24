@@ -10,14 +10,38 @@ import javax.persistence.*;
 public class PivotTable {
     @Id
     @GeneratedValue
-    @Column(name = "city_id",updatable = true)
+    @Column(name = "pivot_id",updatable = true)
     protected Long pivotId;
 
     @ManyToOne(targetEntity = Bank.class,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
-    @JoinColumn(name = "bank_id",referencedColumnName = "bank_id")
+    @JoinColumn(name = "bank_id")
     private Bank bank;
 
     @ManyToOne(targetEntity = Point.class,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
-    @JoinColumn(name = "point_id",referencedColumnName = "point_id")
+    @JoinColumn(name = "point_id")
     private Point point;
+
+    public Long getPivotId() {
+        return pivotId;
+    }
+
+    public void setPivotId(Long pivotId) {
+        this.pivotId = pivotId;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public void setPoint(Point point) {
+        this.point = point;
+    }
 }

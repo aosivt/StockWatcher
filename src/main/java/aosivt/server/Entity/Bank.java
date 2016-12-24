@@ -20,7 +20,7 @@ public class Bank {
     @Column(name = "nameBank")
     protected String name;
 
-    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="bankId", cascade=CascadeType.ALL)
+    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="bank", cascade=CascadeType.ALL)
     public List<PivotTable> pivotTables = new ArrayList<PivotTable>();
 
 
@@ -40,14 +40,14 @@ public class Bank {
         this.name = name;
     }
 
-    public List<Point> getPoint() {
-        return point;
+
+    public List<PivotTable> getPivotTables() {
+        return pivotTables;
     }
 
-    public void setPoint(List<Point> point) {
-        this.point = point;
+    public void setPivotTables(List<PivotTable> pivotTables) {
+        this.pivotTables = pivotTables;
     }
-
 
     public int hashCode() {
         return this.getName().hashCode();

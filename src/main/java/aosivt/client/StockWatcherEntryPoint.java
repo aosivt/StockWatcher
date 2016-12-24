@@ -5,14 +5,24 @@ import aosivt.shared.FieldValidator;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+//import com.vaadin.polymer.paper.widget.PaperButton;
+//import com.vaadin.polymer.paper.widget.PaperToast;
 
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class StockWatcherEntryPoint implements EntryPoint {
+
+
+
+//  @UiField
+//  PaperButton testbutton = new PaperButton();
+//  @UiField
+//  PaperToast toast1 = new PaperToast("Ну Ебано ВРОТ)))");
 
   final Button confirmButton = new Button("Confirm");
   final TextBox nameField = new TextBox();
@@ -40,6 +50,15 @@ public class StockWatcherEntryPoint implements EntryPoint {
     RootPanel.get("confirmButtonId").add(confirmButton);
     RootPanel.get("errorLabelContainer").add(errorLabel);
 
+//    testbutton.setName("Polymer");
+//    testbutton.setRaised(true);
+//
+//    testbutton.addClickHandler(new ClickHandler() {
+//      public void onClick(ClickEvent event) {
+//toast1.open();
+//      }
+//    });
+//    RootPanel.get().add(testbutton);
     // Create the popup dialog box
     dialogBox.setText("Remote procedure call from server");
     dialogBox.setAnimationEnabled(true);

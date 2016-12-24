@@ -23,7 +23,7 @@ public class Point {
 //    @JoinColumn(name = "bank_id",referencedColumnName = "bank_id")
 //    private Bank bank;
 
-    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="pointId", cascade=CascadeType.ALL)
+    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="point", cascade=CascadeType.ALL)
     public List<PivotTable> pivotTables = new ArrayList<PivotTable>();
 
 

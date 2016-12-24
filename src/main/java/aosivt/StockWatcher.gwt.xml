@@ -4,6 +4,7 @@
 <module rename-to='StockWatcher'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+  <!--<inherits name="com.vaadin.polymer.Elements"/>-->
 
 
   <!-- Inherit the default GWT style sheet.                       -->
