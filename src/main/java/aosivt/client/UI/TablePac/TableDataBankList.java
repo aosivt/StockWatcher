@@ -46,10 +46,10 @@ public class TableDataBankList extends CellTable<BankListRef> {
 
     public TableDataBankList (List<BankListRef> _bankList)
     {
-        this.addColumn(this.nameBank);
-        this.addColumn(this.city);
-        this.addColumn(this.address);
-        this.addColumn(this.time);
+        this.addColumn(this.nameBank,"Наименование банка");
+        this.addColumn(this.city,"Город расположение");
+        this.addColumn(this.address,"Адрес нахождения");
+        this.addColumn(this.time, "Время работы");
         this.bankList = _bankList;
 
         ListDataProvider<BankListRef> dataProviderBank
