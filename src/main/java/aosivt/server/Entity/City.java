@@ -1,47 +1,42 @@
 package aosivt.server.Entity;
 
-/**
- * Created by oshchepkovayu on 22.12.16.
- */
-
-import aosivt.client.Entity.InterfacePac.BankInterface;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by oshchepkovayu on 26.12.16.
+ */
 @Entity
-@Table(name = "bank")
-public class Bank {
+@Table(name = "city")
+public class City {
 
     @Id
     @GeneratedValue
-    @Column(name = "bank_id")
-    protected Long bankId;
+    @Column(name = "city_id")
+    protected Long cityId;
 
-    @Column(name = "nameBank")
-    protected String name;
+    @Column(name = "namecity")
+    protected String nameCity;
 
-    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="bank", cascade=CascadeType.ALL)
+    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="city", cascade=CascadeType.ALL)
     public List<PivotTable> pivotTables = new ArrayList<PivotTable>();
 
-
-    public Long getBankId() {
-        return bankId;
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setBankId(Long bankId) {
-        this.bankId = bankId;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
-    public String getName() {
-        return name;
+    public String getNameCity() {
+        return nameCity;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameCity(String nameCity) {
+        this.nameCity = nameCity;
     }
-
 
     public List<PivotTable> getPivotTables() {
         return pivotTables;
@@ -52,7 +47,7 @@ public class Bank {
     }
 
     public int hashCode() {
-        return this.getName().hashCode();
+        return this.getNameCity().hashCode();
     }
 
     @Override
@@ -70,12 +65,12 @@ public class Bank {
         {
             return false;
         }
-        Bank e = (Bank) obj;
-        return (this.getName().equals(e.getName()));
+        City e = (City) obj;
+        return (this.getNameCity().equals(e.getNameCity()));
     }
 
     public String toString()
     {
-        return getName();
+        return getNameCity();
     }
 }

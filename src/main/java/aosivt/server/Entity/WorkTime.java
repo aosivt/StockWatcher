@@ -1,47 +1,42 @@
 package aosivt.server.Entity;
 
-/**
- * Created by oshchepkovayu on 22.12.16.
- */
-
-import aosivt.client.Entity.InterfacePac.BankInterface;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by oshchepkovayu on 26.12.16.
+ */
 @Entity
-@Table(name = "bank")
-public class Bank {
+@Table(name = "worktime")
+public class WorkTime {
 
     @Id
     @GeneratedValue
-    @Column(name = "bank_id")
-    protected Long bankId;
+    @Column(name = "worktime_id")
+    protected Long worktimeId;
 
-    @Column(name = "nameBank")
-    protected String name;
+    @Column(name = "worktime")
+    protected String workTime;
 
-    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="bank", cascade=CascadeType.ALL)
+    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="workTime", cascade=CascadeType.ALL)
     public List<PivotTable> pivotTables = new ArrayList<PivotTable>();
 
-
-    public Long getBankId() {
-        return bankId;
+    public Long getWorktimeId() {
+        return worktimeId;
     }
 
-    public void setBankId(Long bankId) {
-        this.bankId = bankId;
+    public void setWorktimeId(Long worktimeId) {
+        this.worktimeId = worktimeId;
     }
 
-    public String getName() {
-        return name;
+    public String getWorkTime() {
+        return workTime;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
     }
-
 
     public List<PivotTable> getPivotTables() {
         return pivotTables;
@@ -52,7 +47,7 @@ public class Bank {
     }
 
     public int hashCode() {
-        return this.getName().hashCode();
+        return this.getWorkTime().hashCode();
     }
 
     @Override
@@ -70,12 +65,12 @@ public class Bank {
         {
             return false;
         }
-        Bank e = (Bank) obj;
-        return (this.getName().equals(e.getName()));
+        WorkTime e = (WorkTime) obj;
+        return (this.getWorkTime().equals(e.getWorkTime()));
     }
 
     public String toString()
     {
-        return getName();
+        return getWorkTime();
     }
 }

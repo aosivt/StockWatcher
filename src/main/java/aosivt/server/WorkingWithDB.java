@@ -11,6 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import structureXML.wsdl.GetListBankResponse;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -26,33 +27,34 @@ import java.util.Map;
  */
 public class WorkingWithDB {
     private List<Banks> xmlStrgin;
-    private List<String> xmlStrginInput;
+    private List<structureXML.wsdl.Bank> xmlStrginInput;
     private String hsql_query;
 //    private List<String> xmlStrgin = new ArrayList<String>();
     private List<StructureXml> structureXmlList ;
 
-    private List<Bank> bankList ;
+    private List<PivotTable> bankList ;
 
     WorkingWithDB()
     {
         this.hsql_query = "select b.name,p.city,p.address,p.time " +
                 "from Bank b inner join Point p on b.bankId=p.bankId";
 
-        this.bankList = new ArrayList<Bank>();
-        selectBankList();
+//        this.bankList = new ArrayList<Bank>();
+//        selectBankList();
     }
 
-    WorkingWithDB(List<Banks> _xmlStrgin)
-    {
-        this.structureXmlList = new ArrayList<StructureXml>();
-        this.xmlStrgin = new ArrayList<Banks>();
-        this.xmlStrgin = _xmlStrgin;
-    }
-
-//    public WorkingWithDB(List<String> _xmlStrginInput)
+//    WorkingWithDB(List<Banks> _xmlStrgin)
 //    {
-//        this.xmlStrginInput = _xmlStrginInput;
+//        this.structureXmlList = new ArrayList<StructureXml>();
+//        this.xmlStrgin = new ArrayList<Banks>();
+//        this.xmlStrgin = _xmlStrgin;
 //    }
+
+    public WorkingWithDB(GetListBankResponse _getGetListBankResponses)
+    {
+//        this.structureXmlList = new ArrayList<StructureXml>();
+//        this.xmlStrginInput = _getGetListBankResponses.getBank();
+    }
 //
 //
     public boolean EnterPointFromDB()
@@ -87,16 +89,17 @@ public class WorkingWithDB {
     private boolean convertXml()
     {
 
-        if (this.xmlStrgin.size()<0) return false;
-        for (Banks string_content : this.xmlStrgin)
+//        if (this.xmlStrgin.size()<0) return false;
+        if (this.xmlStrginInput.size()<0) return false;
+
+        for (structureXML.wsdl.Bank string_content : this.xmlStrginInput)
         {
             try {
 
-                InputStream stream = new ByteArrayInputStream(string_content.getContent().getBytes());
+                InputStream stream = new ByteArrayInputStream(string_content.getXmlString().getBytes());
                 JAXBContext jaxbContext = JAXBContext.newInstance(StructureXml.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                StructureXml response = (StructureXml) jaxbUnmarshaller.unmarshal(stream);
-                structureXmlList.add(response);
+                structureXmlList.add((StructureXml) jaxbUnmarshaller.unmarshal(stream));
 
             }catch (Exception e)
             {
@@ -113,7 +116,6 @@ public class WorkingWithDB {
     {
 
         try {
-
 
             Bank bank = null;
             Point point = null;
@@ -132,7 +134,7 @@ public class WorkingWithDB {
                                 pointFromMap.getAddress(),
                                 pointFromMap.getTime()
                         );
-                       checExistPivotTable(bank,point);
+//                       checExistPivotTable(bank,point);
                     }
 
 
@@ -226,58 +228,58 @@ public class WorkingWithDB {
         }
         return result_id;
     }
-    private PivotTable checExistPivotTable (Bank _bank, Point _point)
-    {
-        PivotTable pivotTable= null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(PivotTable.class);
-        criteria.add(Restrictions.eq("bank",_bank));
-        criteria.add(Restrictions.eq("point",_point));
-        pivotTable = (PivotTable) criteria.uniqueResult();
-        session.clear();
-        session.close();
-        if (pivotTable==null){
-            pivotTable = new PivotTable();
-            pivotTable.setBank(_bank);
-            pivotTable.setPoint(_point);
-            pivotTable.setPivotId(insertPivotTable(_bank,_point));
-
-        }
-        return pivotTable;
-    }
-    private Long insertPivotTable(Bank _bank, Point _point)
-    {
-        Long result_id;
-        Session session = null;
-        PivotTable pivotTable;
-        try {
-            session  = HibernateUtil.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-
-                pivotTable = new PivotTable();
-                pivotTable.setBank(_bank);
-                pivotTable.setPoint(_point);
-                session.save(pivotTable);
-            result_id = pivotTable.getPivotId();
-
-            transaction.commit();
-
-            session.clear();
-            session.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return null;
-        }finally {
-
-            _bank = null;
-            _point = null;
-            pivotTable = null;
-        }
-        return result_id;
-
-    }
+//    private PivotTable checExistPivotTable (Bank _bank, Point _point)
+//    {
+//        PivotTable pivotTable= null;
+//        Session session = HibernateUtil.getSessionFactory().openSession();
+//        Transaction transaction = session.beginTransaction();
+//        Criteria criteria = session.createCriteria(PivotTable.class);
+//        criteria.add(Restrictions.eq("bank",_bank));
+//        criteria.add(Restrictions.eq("point",_point));
+//        pivotTable = (PivotTable) criteria.uniqueResult();
+//        session.clear();
+//        session.close();
+//        if (pivotTable==null){
+//            pivotTable = new PivotTable();
+//            pivotTable.setBank(_bank);
+//            pivotTable.setPoint(_point);
+//            pivotTable.setPivotId(insertPivotTable(_bank,_point));
+//
+//        }
+//        return pivotTable;
+//    }
+//    private Long insertPivotTable(Bank _bank, Point _point)
+//    {
+//        Long result_id;
+//        Session session = null;
+//        PivotTable pivotTable;
+//        try {
+//            session  = HibernateUtil.getSessionFactory().openSession();
+//            Transaction transaction = session.beginTransaction();
+//
+//                pivotTable = new PivotTable();
+//                pivotTable.setBank(_bank);
+//                pivotTable.setPoint(_point);
+//                session.save(pivotTable);
+//            result_id = pivotTable.getPivotId();
+//
+//            transaction.commit();
+//
+//            session.clear();
+//            session.close();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//            return null;
+//        }finally {
+//
+//            _bank = null;
+//            _point = null;
+//            pivotTable = null;
+//        }
+//        return result_id;
+//
+//    }
 
 
     private void selectBankList()
@@ -287,9 +289,9 @@ public class WorkingWithDB {
                 "select b.name,p.city,p.address,p.time " +
                 "from Bank b , Point p where b.bankId = p.bankId";*/
         this.hsql_query =
-                "select b " +
-                        "from Bank b inner join b.pivotTables pt " +
-                        "order by b.name,  b.bankId";
+                "select pt " +
+                        "from PivotTable pt" +
+                        "order by pt.bank";
 //                        "group by b.name,  b.bankId";
 // ,Point p         join p on b.bankId = p.bankId
 try {
@@ -312,11 +314,11 @@ try {
         session.close();
 
     }
-    public List<Bank> getBankList() {
-        return bankList;
-    }
+//    public List<Bank> getBankList() {
+//        return bankList;
+//    }
 
-    public void setBankList(List<Bank> bankList) {
+    public void setBankList(List<PivotTable> bankList) {
         this.bankList = bankList;
     }
 

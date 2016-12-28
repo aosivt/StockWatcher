@@ -1,4 +1,4 @@
-package aosivt.server.Entity;
+package aosivt.client.Entity;
 
 /**
  * Created by oshchepkovayu on 22.12.16.
@@ -6,23 +6,19 @@ package aosivt.server.Entity;
 
 import aosivt.client.Entity.InterfacePac.BankInterface;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "bank")
-public class Bank {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "bank_id")
+public class Bank  {
+
+
     protected Long bankId;
 
-    @Column(name = "nameBank")
+
     protected String name;
 
-    @OneToMany(targetEntity = PivotTable.class,fetch = FetchType.EAGER,mappedBy="bank", cascade=CascadeType.ALL)
+
     public List<PivotTable> pivotTables = new ArrayList<PivotTable>();
 
 

@@ -11,10 +11,12 @@
       <excludeFolder url="file://$MODULE_DIR$/target/StockWatcherId-1.0-SNAPSHOT" />
       <excludeFolder url="file://$MODULE_DIR$/target/gwt-unitCache" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-status" />
+      <excludeFolder url="file://$MODULE_DIR$/target/site" />
       <excludeFolder url="file://$MODULE_DIR$/target1" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.6.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.gwt:gwt-user:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:sources:1.0.0.GA" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20090211" level="project" />
@@ -22,7 +24,7 @@
     <orderEntry type="library" name="Maven: com.google.gwt:gwt-codeserver:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.gwtmaterialdesign:gwt-material:2.0-rc3" level="project" />
     <orderEntry type="library" name="Maven: com.github.gwtmaterialdesign:gwt-material-jquery:1.0-rc3" level="project" />
-    <orderEntry type="library" name="Maven: com.oracle:ojdbc6:11.2.0.3" level="project" />
+    <orderEntry type="library" name="Maven: com.oracle:ojdbc6:11.2.0.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-core:3.6.3.Final" level="project" />
     <orderEntry type="library" name="Maven: antlr:antlr:2.7.6" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.1" level="project" />

@@ -1,18 +1,13 @@
 package aosivt.server;
 
 import aosivt.client.GwtAppServiceIntf;
-import aosivt.server.Entity.Bank;
-import aosivt.server.Entity.Banks;
 import aosivt.server.SoapClient.ConSoapClient;
 import aosivt.server.SoapClient.SoapClientConfiguration;
-import aosivt.server.util.HibernateUtil;
 import aosivt.shared.FieldValidator;
-
+import aosivt.shared.ReferencesClientServer.BankListRef;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,34 +17,29 @@ import java.util.Locale;
 
 public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppServiceIntf {
 
-    public String gwtAppCallServer(String data) throws IllegalArgumentException {
+    private boolean checkUpdate = false;
 
-        Locale.setDefault(Locale.ENGLISH);
+    public GwtAppServiceImpl(){Locale.setDefault(Locale.ENGLISH);}
+
+
+    public List<BankListRef> gwtAppCallServer(String data) throws IllegalArgumentException {
+
 
         if (!FieldValidator.isValidData(data)) {
             throw new IllegalArgumentException("Имя должно быть больше трех символов");
         }
-//        WorkingWithDB workingWithDB = new WorkingWithDB(getListXml());
-//        workingWithDB.EnterPointFromDB();
-//        workingWithDB = null;
 
-        SoapClientConfiguration clientConfiguration = new SoapClientConfiguration();
-
-        ConSoapClient conSoapClient = clientConfiguration.soapClient(clientConfiguration.marshaller());
-
-        conSoapClient.getListBankResponse();
-
-//        WorkingWithDB workingWithDB = new WorkingWithDB();
-//        List<Bank> banks = workingWithDB.getBankList();
-//
-                String serverInfo = getServletContext().getServerInfo();
+        String serverInfo = getServletContext().getServerInfo();
         String userAgent = getThreadLocalRequest().getHeader("User-Agent");
 
         data = escapeHtml(data);
         userAgent = escapeHtml(userAgent);
 
-        return "Привет, " + data + "!<br> Инфо сервера: " + serverInfo + ".<br> Вы используете:" +
-                "<br>" + userAgent;
+//      updateDataBase();
+
+        List<BankListRef> listbank = getListFromPivotTable(getListBank("adsfadsf"));
+
+        return listbank;
     }
 
     private String escapeHtml(String html) {
@@ -60,29 +50,45 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
                 ">", "&gt;");
     }
 
-    protected static List<Banks> getListXml()
+    public List<aosivt.server.Entity.PivotTable> getListBank(String data) throws IllegalArgumentException
     {
+        if (data.equals("")){return null;}
 
-        System.out.println("Select List StructureXml");
-
-
-        List<Banks> resultlist = null;
-        Session session = null;
-
-        try {
-            session  = HibernateUtil.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-
-            Query q = session.createQuery("From Banks");
-            resultlist = q.list();
-            session.clear();
-            session.close();
-            System.out.println("Done");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-        return  resultlist;
+        aosivt.server.DBPack.WorkingWithDB workingWithDB = new aosivt.server.DBPack.WorkingWithDB();
+        List<aosivt.server.Entity.PivotTable> banks =  workingWithDB.getBankList();
+        return banks;
     }
+
+    private void updateDataBase()
+    {
+        if (this.checkUpdate){return;}
+
+        SoapClientConfiguration clientConfiguration = new SoapClientConfiguration();
+        ConSoapClient conSoapClient = clientConfiguration.soapClient(clientConfiguration.marshaller());
+        aosivt.server.DBPack.WorkingWithDB workingWithDB = new aosivt.server.DBPack.WorkingWithDB(conSoapClient.getListBankResponse());
+        workingWithDB.EnterPointFromDB();
+        workingWithDB = null;
+        this.checkUpdate = true;
+    }
+
+    private List<BankListRef> getListFromPivotTable(List<aosivt.server.Entity.PivotTable> _list)
+    {
+        List<BankListRef> listBankRef = new ArrayList<BankListRef>();
+        BankListRef bankRef = null;
+        for (aosivt.server.Entity.PivotTable pivotTable: _list)
+        {
+            bankRef = new BankListRef();
+            bankRef.setAddress(pivotTable.getAddress().toString());
+            bankRef.setCity(pivotTable.getCity().toString());
+            bankRef.setNameBank(pivotTable.getBank().toString());
+            bankRef.setTime(pivotTable.getWorkTime().toString());
+            listBankRef.add(bankRef);
+        }
+
+        return listBankRef;
+    }
+
+
+
 
 }

@@ -23,15 +23,7 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="1a7084c4-05ed-4b31-b4af-6723df597aa4">
-        <schema name="MDSYS" object-types="synonym, type" />
-        <schema name="OUTLN" object-types="table" />
-        <schema name="PUBLIC" object-types="materialized view, synonym, table, view" />
-        <schema name="SYS" object-types="synonym, type" />
-        <schema name="SYSTEM" object-types="cluster, column, constraint, dblink, dimension, function, index, materialized view, nested table, package, procedure, sequence, synonym, table, dataset trigger, database trigger, type, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="1a7084c4-05ed-4b31-b4af-6723df597aa4">
@@ -43,6 +35,7 @@ select bank0_.bank_id as bank1_1_, bank0_.nameBank as nameBank1_ from bank bank0
     <filter-list connection-id="1a7084c4-05ed-4b31-b4af-6723df597aa4" dataset="SYSTEM.BANK" active-filter-id="EMPTY_FILTER" />
     <filter-list connection-id="1a7084c4-05ed-4b31-b4af-6723df597aa4" dataset="SYSTEM.DOCUMENTS" active-filter-id="EMPTY_FILTER" />
     <filter-list connection-id="1a7084c4-05ed-4b31-b4af-6723df597aa4" dataset="OUTLN.OL$" active-filter-id="EMPTY_FILTER" />
+    <filter-list connection-id="1a7084c4-05ed-4b31-b4af-6723df597aa4" dataset="SYSTEM.BANKS" active-filter-id="EMPTY_FILTER" />
     <filter-list connection-id="1a7084c4-05ed-4b31-b4af-6723df597aa4" dataset="SYSTEM.POINT" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">

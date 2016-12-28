@@ -1,32 +1,24 @@
-package aosivt.server.Entity;
+package aosivt.client.Entity;
 
 /**
  * Created by oshchepkovayu on 23.12.16.
  */
-import javax.persistence.*;
 
-@Entity
-@Table(name = "pivotTable")
-public class PivotTable  {
-    @Id
-    @GeneratedValue
-    @Column(name = "pivot_id",updatable = true)
+import aosivt.client.Entity.InterfacePac.PivotTableInterface;
+
+public class PivotTable {
+
     protected Long pivotId;
 
-    @ManyToOne(targetEntity = Bank.class,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
-    @JoinColumn(name = "bank_id")
+
     private Bank bank;
 
-    @ManyToOne(targetEntity = City.class,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
-    @JoinColumn(name = "city_id")
     private City city;
 
-    @ManyToOne(targetEntity = Address.class,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+
     private Address address;
 
-    @ManyToOne(targetEntity = WorkTime.class,fetch = FetchType.EAGER,cascade=CascadeType.ALL)
-    @JoinColumn(name = "worktime_id")
+
     private WorkTime workTime;
 
     public Long getPivotId() {

@@ -6,6 +6,6 @@ public class FieldValidator {
         if (data == null) {
             return false;
         }
-        return data.length() >=3;
+        return data.length() >=1;
     }
 }

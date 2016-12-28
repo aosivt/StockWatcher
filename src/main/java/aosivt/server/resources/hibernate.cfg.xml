@@ -41,7 +41,10 @@
 
         <mapping class="aosivt.server.Entity.Banks" />
         <mapping class="aosivt.server.Entity.Bank" />
-        <mapping class="aosivt.server.Entity.Point" />
+        <mapping class="aosivt.server.Entity.WorkTime" />
+        <mapping class="aosivt.server.Entity.City" />
+        <mapping class="aosivt.server.Entity.Address" />
+
         <mapping class="aosivt.server.Entity.PivotTable" />
 
 
