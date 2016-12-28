@@ -3,8 +3,9 @@ package aosivt.client;
 /**
  * Created by oshchepkovayu on 21.12.16.
  */
-import aosivt.client.Entity.PivotTable;
+
 import aosivt.shared.ReferencesClientServer.BankListRef;
+import aosivt.shared.ReferencesClientServer.OptionRequest;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -16,5 +17,5 @@ import java.util.List;
  */
 @RemoteServiceRelativePath("gwtServlet")
 public interface GwtAppServiceIntf extends RemoteService {
-    List<BankListRef> gwtAppCallServer(String data) throws IllegalArgumentException;
+    List<BankListRef> gwtAppCallServer(OptionRequest data) throws IllegalArgumentException;
 }

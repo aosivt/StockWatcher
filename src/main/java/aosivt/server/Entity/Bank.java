@@ -4,7 +4,7 @@ package aosivt.server.Entity;
  * Created by oshchepkovayu on 22.12.16.
  */
 
-import aosivt.client.Entity.InterfacePac.BankInterface;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;

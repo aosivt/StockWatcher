@@ -114,6 +114,7 @@ public class WorkingWithDB {
         this.hsql_query =
                 "select pt " +
                         "from PivotTable pt " +
+                        "where pt.bank like N%" +
                         "order by pt.bank";
 
         try {

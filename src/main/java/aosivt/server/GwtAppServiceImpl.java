@@ -3,13 +3,16 @@ package aosivt.server;
 import aosivt.client.GwtAppServiceIntf;
 import aosivt.server.SoapClient.ConSoapClient;
 import aosivt.server.SoapClient.SoapClientConfiguration;
+import aosivt.server.TimerPack.TimerForUpdateDB;
 import aosivt.shared.FieldValidator;
 import aosivt.shared.ReferencesClientServer.BankListRef;
+import aosivt.shared.ReferencesClientServer.OptionRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
 
 /**
  * The server-side implementation of the RPC service.
@@ -17,27 +20,36 @@ import java.util.Locale;
 
 public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppServiceIntf {
 
-    private boolean checkUpdate = false;
+
+
+    private TimerForUpdateDB updateTimer;
+
 
     public GwtAppServiceImpl(){Locale.setDefault(Locale.ENGLISH);}
 
 
-    public List<BankListRef> gwtAppCallServer(String data) throws IllegalArgumentException {
+    public List<BankListRef> gwtAppCallServer(OptionRequest data) throws IllegalArgumentException {
 
 
-        if (!FieldValidator.isValidData(data)) {
-            throw new IllegalArgumentException("Имя должно быть больше трех символов");
-        }
 
-        String serverInfo = getServletContext().getServerInfo();
+//        String serverInfo = getServletContext().getServerInfo();
         String userAgent = getThreadLocalRequest().getHeader("User-Agent");
 
-        data = escapeHtml(data);
+
         userAgent = escapeHtml(userAgent);
 
-//      updateDataBase();
+//        if (this.updateTimer==null) {
+//            updateDataBase();
+//            updateTimer = new TimerForUpdateDB(data.getEnterMinutWorkTimer());
+//        }
+//        else if (this.updateTimer.getPeriodMinute()!=data.getEnterMinutWorkTimer())
+//        {
+//            this.updateTimer.cancel();
+//            this.updateTimer = null;
+//            this.updateTimer = new TimerForUpdateDB(data.getEnterMinutWorkTimer());
+//        }
 
-        List<BankListRef> listbank = getListFromPivotTable(getListBank("adsfadsf"));
+        List<BankListRef> listbank = getListFromPivotTable(getListBank(data.getNameBank()));
 
         return listbank;
     }
@@ -59,16 +71,13 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
         return banks;
     }
 
-    private void updateDataBase()
+    public static void updateDataBase()
     {
-        if (this.checkUpdate){return;}
-
         SoapClientConfiguration clientConfiguration = new SoapClientConfiguration();
         ConSoapClient conSoapClient = clientConfiguration.soapClient(clientConfiguration.marshaller());
         aosivt.server.DBPack.WorkingWithDB workingWithDB = new aosivt.server.DBPack.WorkingWithDB(conSoapClient.getListBankResponse());
         workingWithDB.EnterPointFromDB();
         workingWithDB = null;
-        this.checkUpdate = true;
     }
 
     private List<BankListRef> getListFromPivotTable(List<aosivt.server.Entity.PivotTable> _list)

@@ -4,6 +4,7 @@ package aosivt.client;
 import aosivt.client.UI.TablePac.TableDataBankList;
 import aosivt.shared.FieldValidator;
 import aosivt.shared.ReferencesClientServer.BankListRef;
+import aosivt.shared.ReferencesClientServer.OptionRequest;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
@@ -31,8 +32,9 @@ public class StockWatcherEntryPoint implements EntryPoint {
 //  @UiField
 //  PaperToast toast1 = new PaperToast("Ну Ебано ВРОТ)))");
 
-  final Button confirmButton = new Button("Confirm");
+  final Button confirmButton = new Button("Поиск");
   final TextBox nameField = new TextBox();
+  final TextBox optionTimer = new TextBox();
   final Label errorLabel = new Label();
   final Label helloLabel = new Label();
 
@@ -43,34 +45,22 @@ public class StockWatcherEntryPoint implements EntryPoint {
   final Button closeButton = new Button("Close");
   private final GwtAppServiceIntfAsync gwtAppServiceImpl = GWT.create(GwtAppServiceIntf.class);
 
-  //  private final GwtAppServiceIntfAsync gwtAppServiceImpl = GWT.create(GetListBankInterface.class);
+
   @Override
   public void onModuleLoad() {
-    helloLabel.setText("GwtApp Application hello world");
+    helloLabel.setText("Поиск расположение и рабочее время банка по его наименованию");
 
-//    CellTable<BankListRef> cellTableBank = new TableDataBankList();
-
-
-    final Label usernameLabel = new Label();
-    usernameLabel.setText("Username: ");
         /*Связываем id='' на html странице с компонентами */
     RootPanel.get("helloId").add(helloLabel);
 
-    RootPanel.get("usernameLabelId").add(usernameLabel);
-    RootPanel.get("usernameId").add(nameField);
+//    RootPanel.get("usernameLabelId").add(usernameLabel);
+
+    RootPanel.get("searchValueId").add(nameField);
+    RootPanel.get("timerOptionId").add(optionTimer);
 
     RootPanel.get("confirmButtonId").add(confirmButton);
     RootPanel.get("errorLabelContainer").add(errorLabel);
 
-//    testbutton.setName("Polymer");
-//    testbutton.setRaised(true);
-//
-//    testbutton.addClickHandler(new ClickHandler() {
-//      public void onClick(ClickEvent event) {
-//toast1.open();
-//      }
-//    });
-//    RootPanel.get().add(testbutton);
     // Create the popup dialog box
     dialogBox.setText("Remote procedure call from server");
     dialogBox.setAnimationEnabled(true);
@@ -89,7 +79,7 @@ public class StockWatcherEntryPoint implements EntryPoint {
     //обработчик для клика по кнопке 'Confirm'
     confirmButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
-        confirmButton.setEnabled(false);
+//        confirmButton.setEnabled(false);
         sendInfoToServer();
       }
     });
@@ -111,7 +101,7 @@ public class StockWatcherEntryPoint implements EntryPoint {
       }
     });
 
-//    RootPanel.get().add(cellTableBank);
+
 
   }
 
@@ -119,16 +109,25 @@ public class StockWatcherEntryPoint implements EntryPoint {
   private void sendInfoToServer() {
     //validate input text
     errorLabel.setText("");
-    String nameToServer = nameField.getText();
-    if (!FieldValidator.isValidData(nameToServer)) { //отобразить ошибку на html странице
-      errorLabel.setText("Имя должно содержать больше трех символов111");
+    OptionRequest optionRequest = new OptionRequest();
+
+    optionRequest.setNameBank(nameField.getText());
+    optionRequest.setEnterMinutWorkTimer(Integer.parseInt(optionTimer.getText()));
+
+    if (!FieldValidator.isValidData(optionTimer.getText())) {
+      errorLabel.setText("Укажите целое чилсло");
       return;
     }
-    sendToServerLabel.setText(nameToServer);
+    else if (!FieldValidator.isValidMinMax(optionTimer.getText()))
+    {
+      errorLabel.setText("Целое число должно быть в диапозоне от 10 до 100 минут");
+      return;
+    }
+//    sendToServerLabel.setText(nameToServer);
     confirmButton.setEnabled(false);
-    serverResponseHtml.setText("");
+//    serverResponseHtml.setText("");
 
-    gwtAppServiceImpl.gwtAppCallServer(nameToServer, new AsyncCallback<List<BankListRef>>() {
+    gwtAppServiceImpl.gwtAppCallServer(optionRequest, new AsyncCallback<List<BankListRef>>() {
       @Override
       public void onFailure(Throwable throwable) {
         dialogBox.setText("Remote Procedure Call - Failure");
@@ -146,11 +145,12 @@ public class StockWatcherEntryPoint implements EntryPoint {
         RootPanel.get().add(cellTableBank);
 
 
-        dialogBox.setText("Remote Procedure Call");
-        serverResponseHtml.removeStyleName("serverResponseLabelError");
-        serverResponseHtml.setHTML(bankListRefs.get(0).getAddress());
-        dialogBox.center();
-        closeButton.setFocus(true);
+//        dialogBox.setText("Remote Procedure Call");
+//        serverResponseHtml.removeStyleName("serverResponseLabelError");
+//        serverResponseHtml.setHTML(bankListRefs.get(0).getAddress());
+//        dialogBox.center();
+        confirmButton.setEnabled(true);
+//        closeButton.setFocus(true);
 
       }
 
