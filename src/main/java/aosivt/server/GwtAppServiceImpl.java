@@ -4,7 +4,6 @@ import aosivt.client.GwtAppServiceIntf;
 import aosivt.server.SoapClient.ConSoapClient;
 import aosivt.server.SoapClient.SoapClientConfiguration;
 import aosivt.server.TimerPack.TimerForUpdateDB;
-import aosivt.shared.FieldValidator;
 import aosivt.shared.ReferencesClientServer.BankListRef;
 import aosivt.shared.ReferencesClientServer.OptionRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -12,7 +11,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
 
 /**
  * The server-side implementation of the RPC service.
@@ -31,13 +29,6 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
     public List<BankListRef> gwtAppCallServer(OptionRequest data) throws IllegalArgumentException {
 
 
-
-//        String serverInfo = getServletContext().getServerInfo();
-        String userAgent = getThreadLocalRequest().getHeader("User-Agent");
-
-
-        userAgent = escapeHtml(userAgent);
-
 //        if (this.updateTimer==null) {
 //            updateDataBase();
 //            updateTimer = new TimerForUpdateDB(data.getEnterMinutWorkTimer());
@@ -54,19 +45,12 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
         return listbank;
     }
 
-    private String escapeHtml(String html) {
-        if (html == null) {
-            return null;
-        }
-        return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(
-                ">", "&gt;");
-    }
-
-    public List<aosivt.server.Entity.PivotTable> getListBank(String data) throws IllegalArgumentException
+    private List<aosivt.server.Entity.PivotTable> getListBank(String data) throws IllegalArgumentException
     {
         if (data.equals("")){return null;}
 
         aosivt.server.DBPack.WorkingWithDB workingWithDB = new aosivt.server.DBPack.WorkingWithDB();
+        workingWithDB.selectBankList(data);
         List<aosivt.server.Entity.PivotTable> banks =  workingWithDB.getBankList();
         return banks;
     }
@@ -75,7 +59,8 @@ public class GwtAppServiceImpl extends RemoteServiceServlet implements GwtAppSer
     {
         SoapClientConfiguration clientConfiguration = new SoapClientConfiguration();
         ConSoapClient conSoapClient = clientConfiguration.soapClient(clientConfiguration.marshaller());
-        aosivt.server.DBPack.WorkingWithDB workingWithDB = new aosivt.server.DBPack.WorkingWithDB(conSoapClient.getListBankResponse());
+        aosivt.server.DBPack.WorkingWithDB workingWithDB =
+                new aosivt.server.DBPack.WorkingWithDB(conSoapClient.getListBankResponse());
         workingWithDB.EnterPointFromDB();
         workingWithDB = null;
     }

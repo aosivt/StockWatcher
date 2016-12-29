@@ -1,6 +1,5 @@
 package aosivt.client.UI.TablePac;
 
-import aosivt.shared.ReferencesClientServer.BankListRef;
 import aosivt.client.UI.TablePac.ColumnPac.AddressBankColumn;
 import aosivt.client.UI.TablePac.ColumnPac.CityBankColumn;
 import aosivt.client.UI.TablePac.ColumnPac.NameBankColumn;
@@ -14,7 +13,7 @@ import java.util.List;
 /**
  * Created by oshchepkovayu on 26.12.16.
  */
-public class TableDataBankList extends CellTable<BankListRef> {
+public class TableDataBankList<BankListRef> extends CellTable<BankListRef> {
 
     private List<BankListRef> bankList  = new   ArrayList<BankListRef>();
     private TextColumn        nameBank  = new           NameBankColumn();
@@ -24,22 +23,22 @@ public class TableDataBankList extends CellTable<BankListRef> {
 
     public TableDataBankList ()
     {
-        BankListRef bankListRef = new BankListRef();
-        bankListRef.setTime("sfdgfdg");
-        bankListRef.setAddress("sfdgfdg");
-        bankListRef.setCity("sfdgfdg");
-        bankListRef.setNameBank("sfdgfdg");
-
-        List<BankListRef> bankListRefsL = new ArrayList<BankListRef>();
-        bankListRefsL.add(bankListRef);
-
-        bankList = bankListRefsL;
-
+//        BankListRef bankListRef = new BankListRef();
+//        bankListRef.setTime("sfdgfdg");
+//        bankListRef.setAddress("sfdgfdg");
+//        bankListRef.setCity("sfdgfdg");
+//        bankListRef.setNameBank("sfdgfdg");
+//
+//        List<BankListRef> bankListRefsL = new ArrayList<BankListRef>();
+//        bankListRefsL.add(bankListRef);
+//
+//        bankList = bankListRefsL;
+//
     this.addColumn(this.nameBank);
     this.addColumn(this.city);
     this.addColumn(this.address);
     this.addColumn(this.time);
-
+//
         ListDataProvider<BankListRef> dataProviderBank = new ListDataProvider<BankListRef>(this.bankList);
         dataProviderBank.addDataDisplay(this);
     }
@@ -47,9 +46,9 @@ public class TableDataBankList extends CellTable<BankListRef> {
     public TableDataBankList (List<BankListRef> _bankList)
     {
         this.addColumn(this.nameBank,"Наименование банка");
-        this.addColumn(this.city,"Город расположение");
-        this.addColumn(this.address,"Адрес нахождения");
-        this.addColumn(this.time, "Время работы");
+        this.addColumn(this.city,    "Город расположение");
+        this.addColumn(this.address, "Адрес нахождения"  );
+        this.addColumn(this.time,    "Время работы"      );
         this.bankList = _bankList;
 
         ListDataProvider<BankListRef> dataProviderBank

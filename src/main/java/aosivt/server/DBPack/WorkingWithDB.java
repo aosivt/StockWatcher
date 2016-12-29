@@ -33,11 +33,7 @@ public class WorkingWithDB {
 
     public WorkingWithDB()
     {
-        this.hsql_query = "select b.name,p.city,p.address,p.time " +
-                "from Bank b inner join Point p on b.bankId=p.bankId";
-
         this.bankList = new ArrayList<PivotTable>();
-        selectBankList();
     }
 
     public WorkingWithDB(GetListBankResponse _getGetListBankResponses)
@@ -107,22 +103,20 @@ public class WorkingWithDB {
         return true;
     }
 
-    private void selectBankList()
+    public void selectBankList(String _nameBank)
     {
         Session session = null;
 
         this.hsql_query =
                 "select pt " +
                         "from PivotTable pt " +
-                        "where pt.bank like N%" +
+                        "where lower(pt.bank.name) like lower(:nameBank) " +
                         "order by pt.bank";
 
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query query = session.createQuery(this.hsql_query);
+            Query query = session.createQuery(this.hsql_query).setParameter("nameBank", "%"+_nameBank+"%");
             this.bankList = query.list();
-
-
 
         }catch (Exception e)
         {
@@ -130,7 +124,6 @@ public class WorkingWithDB {
         }
         session.clear();
         session.close();
-
     }
 
     public List<PivotTable> getBankList() {

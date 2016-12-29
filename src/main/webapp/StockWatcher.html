@@ -2,10 +2,12 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <link type="text/css" rel="stylesheet" href="StockWatcher.css">
+    <link type="text/css" rel="stylesheet" href="css/StockWatcher.css">
+    <link type="text/css" rel="stylesheet" href="css/material.min.css">
     <title>StockWatcher</title>
     <!--<script src="StockWatcher/bower_components/webcomponentsjs/webcomponents.js"></script>-->
     <script type="text/javascript" language="javascript" src="StockWatcher/StockWatcher.nocache.js"></script>
+    <script type="text/javascript" language="javascript" src="js/material.min.js"></script>
 
 
 
@@ -23,24 +25,39 @@
         in order for this application to display correctly.
       </div>
     </noscript>
-    <h1 id="helloId" style="text-align: center"></h1>
+    <h3 id="helloId" style="text-align: center"></h3>
 
     <table align="center">
       <tr>
-        <td colspan="2" style="font-weight: bold; text-align: center">Поиск банка по наименованию</td>
-      </tr>
-      <tr>
-        <td >Параметры поиска(Наименование банка/проверка обновлений через сервис в минутах)</td>
-        <td id="searchValueId"></td>
-        <td id="timerOptionId"></td>
-      </tr>
-      <tr>
-        <td id="confirmButtonId"></td>
-      </tr>
-      <tr>
         <td colspan="2" style="color:red;" id="errorLabelContainer"></td>
       </tr>
+      <tr>
+        <td >
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="searchValueId">
+            <label class="mdl-textfield__label" for="searchValueId">Наименование банка</label>
+          </div>
+
+        </td>
+        <td >
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="timerOptionId">
+            <label class="mdl-textfield__label" for="timerOptionId">Запуск обновлений (мин)</label>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" id="confirmButtonId">
+        </td>
+      </tr>
+      <tr>
+
+      </tr>
     </table>
+
+    <table align="center" id="resultTable" class="mdl-data-table mdl-js-data-table"></table>
+
 
   </body>
 </html>

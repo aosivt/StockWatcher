@@ -7,8 +7,11 @@ import aosivt.shared.ReferencesClientServer.BankListRef;
 import aosivt.shared.ReferencesClientServer.OptionRequest;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
@@ -24,19 +27,14 @@ import java.util.List;
  */
 public class StockWatcherEntryPoint implements EntryPoint {
 
-//  @UiField
-//  MaterialButton btnClick, btnHover, btnDoubleClick;
-
-//  @UiField
-//  PaperButton testbutton = new PaperButton();
-//  @UiField
-//  PaperToast toast1 = new PaperToast("Ну Ебано ВРОТ)))");
 
   final Button confirmButton = new Button("Поиск");
   final TextBox nameField = new TextBox();
   final TextBox optionTimer = new TextBox();
+
   final Label errorLabel = new Label();
   final Label helloLabel = new Label();
+  final CellTable<BankListRef> cellTableBank = new TableDataBankList<BankListRef>();
 
   VerticalPanel dialogVPanel = new VerticalPanel();
   final DialogBox dialogBox = new DialogBox();
@@ -50,41 +48,36 @@ public class StockWatcherEntryPoint implements EntryPoint {
   public void onModuleLoad() {
     helloLabel.setText("Поиск расположение и рабочее время банка по его наименованию");
 
-        /*Связываем id='' на html странице с компонентами */
     RootPanel.get("helloId").add(helloLabel);
 
-//    RootPanel.get("usernameLabelId").add(usernameLabel);
-
     RootPanel.get("searchValueId").add(nameField);
+    nameField.getElement().setAttribute("class","mdl-textfield__input");
+    nameField.getElement().setAttribute("id","searchValueIdDesign");
+
+
     RootPanel.get("timerOptionId").add(optionTimer);
+    optionTimer.getElement().setAttribute("class","mdl-textfield__input");
+    optionTimer.getElement().setAttribute("id","timerOptionIdDesign");
+
 
     RootPanel.get("confirmButtonId").add(confirmButton);
     RootPanel.get("errorLabelContainer").add(errorLabel);
 
-    // Create the popup dialog box
-    dialogBox.setText("Remote procedure call from server");
-    dialogBox.setAnimationEnabled(true);
+//    RootPanel.get("resultTable").add(cellTableBank);
 
-    closeButton.getElement().setId("closeButtonId");
+     confirmButton.getElement().setAttribute("class",
+            "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent");
+    confirmButton.setText("Поиск");
 
-    dialogVPanel.addStyleName("dialogVPanel");
-    dialogVPanel.add(new HTML("<b>Отправленные поля на сервер:</b>"));
-    dialogVPanel.add(sendToServerLabel);
-    dialogVPanel.add(new HTML("<br><b>Ответ сервера:</b>"));
-    dialogVPanel.add(serverResponseHtml);
-    dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-    dialogVPanel.add(closeButton);
-    dialogBox.setWidget(dialogVPanel);
-
-    //обработчик для клика по кнопке 'Confirm'
     confirmButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
-//        confirmButton.setEnabled(false);
+
         sendInfoToServer();
       }
     });
 
-    //обработчик по нажатию enter в текстовом поле
+
+
     nameField.addKeyUpHandler(new KeyUpHandler() {
       public void onKeyUp(KeyUpEvent event) {
         if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -92,70 +85,55 @@ public class StockWatcherEntryPoint implements EntryPoint {
         }
       }
     });
-    //обработчик по клику на кнопку 'Close' в диалоговом окне
-    closeButton.addClickHandler(new ClickHandler() {
-      public void onClick(ClickEvent event) {
-        dialogBox.hide();
-        confirmButton.setEnabled(true);
-        confirmButton.setFocus(true);
+
       }
-    });
-
-
-
-  }
-
 
   private void sendInfoToServer() {
-    //validate input text
+
+    optionTimer.setText(((InputElement)(Element) DOM.getElementById("timerOptionId")).getValue());
+    nameField.setText(((InputElement)(Element) DOM.getElementById("searchValueId")).getValue());
+
+
     errorLabel.setText("");
-    OptionRequest optionRequest = new OptionRequest();
 
-    optionRequest.setNameBank(nameField.getText());
-    optionRequest.setEnterMinutWorkTimer(Integer.parseInt(optionTimer.getText()));
-
+    //validate input text
     if (!FieldValidator.isValidData(optionTimer.getText())) {
-      errorLabel.setText("Укажите целое чилсло");
+
+      errorLabel.setText("Укажите целое чилсло" );
       return;
     }
-    else if (!FieldValidator.isValidMinMax(optionTimer.getText()))
+    else if (FieldValidator.isValidMinMax(optionTimer.getText()))
     {
+
       errorLabel.setText("Целое число должно быть в диапозоне от 10 до 100 минут");
       return;
     }
-//    sendToServerLabel.setText(nameToServer);
+
+
+    OptionRequest optionRequest = new OptionRequest();
+    optionRequest.setNameBank(nameField.getText());
+    optionRequest.setEnterMinutWorkTimer(Integer.parseInt(optionTimer.getText()));
+
     confirmButton.setEnabled(false);
-//    serverResponseHtml.setText("");
+
 
     gwtAppServiceImpl.gwtAppCallServer(optionRequest, new AsyncCallback<List<BankListRef>>() {
       @Override
       public void onFailure(Throwable throwable) {
-        dialogBox.setText("Remote Procedure Call - Failure");
-        serverResponseHtml.addStyleName("serverResponseLabelError");
-        serverResponseHtml.setHTML(throwable.getMessage());
-        dialogBox.center();
-        closeButton.setFocus(true);
+        errorLabel.setText("Ошибка соедения с сервером: " + throwable.getLocalizedMessage());
       }
 
       @Override
       public void onSuccess(List<BankListRef> bankListRefs) {
-        CellTable<BankListRef> cellTableBank
-                = new TableDataBankList(bankListRefs);
 
-        RootPanel.get().add(cellTableBank);
+        RootPanel.get("resultTable").clear();
+        RootPanel.get("resultTable").setWidth("500");
+        RootPanel.get("resultTable").add(new TableDataBankList(bankListRefs));
 
-
-//        dialogBox.setText("Remote Procedure Call");
-//        serverResponseHtml.removeStyleName("serverResponseLabelError");
-//        serverResponseHtml.setHTML(bankListRefs.get(0).getAddress());
-//        dialogBox.center();
         confirmButton.setEnabled(true);
-//        closeButton.setFocus(true);
-
       }
 
-
     });
+    }
 
-  }
 }
